@@ -15,9 +15,11 @@ class Update extends FormRequest
      */
     public function authorize()
     {
+        if (empty($this->id)) {
+            return false;
+        }
         $post = Post::query()->find($this->id);
-        return Auth::user()->id == $post->user_id;
-
+        return Auth::user()?->id == $post->user_id;
     }
 
     /**
@@ -28,7 +30,7 @@ class Update extends FormRequest
     public function rules()
     {
         return [
-
+            'id' => 'required',
             'title' => 'required|max:255|unique:posts,title,' . $this->id,
             'text' => 'required'
         ];

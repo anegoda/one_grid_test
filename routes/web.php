@@ -16,14 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PostController::class, 'index'])->name('post.index');
-Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
-Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
-Route::get('/post/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
-Route::put('/post/update', [PostController::class, 'update'])->name('post.update');
-Route::get('/post/delete/{post}', [PostController::class, 'destroy'])->name('post.delete');
+Route::middleware('auth')->group(function () {
+    Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
+    Route::get('/post/edit/{post}', [PostController::class, 'edit'])->middleware('post_owner')->name('post.edit');
+    Route::put('/post/update', [PostController::class, 'update'])->name('post.update');
+    Route::get('/post/delete/{post}', [PostController::class, 'destroy'])->middleware('post_owner')->name('post.delete');
 
-Route::get('/post/rating/up/{post}', [RatingController::class, 'up'])->name('post.up');
-Route::get('/post/rating/down/{post}', [RatingController::class, 'down'])->name('post.down');
+    Route::get('/post/rating/up/{post}', [RatingController::class, 'up'])->name('post.up');
+    Route::get('/post/rating/down/{post}', [RatingController::class, 'down'])->name('post.down');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
