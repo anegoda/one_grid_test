@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
 use App\Services\RatingService;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class RatingController extends Controller
 {
     public function __construct(
-        public RatingService $ratingService
+        private RatingService $ratingService
     ) {}
 
-    public function up(Post $post)
+    public function up(Post $post): RedirectResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
-
-        $this->ratingService->up($post, $user);
+        $this->ratingService->up($post);
 
         return redirect()->route('post.index');
     }
 
-    public function down(Post $post)
+    public function down(Post $post): RedirectResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
-
-        $this->ratingService->down($post, $user);
+        $this->ratingService->down($post);
 
         return redirect()->route('post.index');
     }

@@ -5,21 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Post\Store;
 use App\Http\Requests\Post\Update;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use App\Services\PostService;
 
 class PostController extends Controller
 {
     public function __construct(
-        public PostService $postService
+        private PostService $postService
     ) {}
 
     public function index(): View
     {
-//        dd(Post::with('ratingValues')->get());
         return view('welcome', [
             'posts' => Post::with('ratingValues')->get()
         ]);
@@ -32,42 +29,29 @@ class PostController extends Controller
 
     public function store(Store $request): RedirectResponse
     {
-        $post = new Post;
-        $post->fill($request->all());
-
-        /** @var User $user */
-        $user = Auth::user();
-        $user->posts()->save($post);
+        $this->postService->store($request->all());
 
         return redirect()->route('post.index');
     }
 
-    public function edit(Post $post)
+    public function edit(Post $post): View
     {
         return view('post.edit', [
             'post' => $post
         ]);
     }
 
-    public function update(Update $request)
+    public function update(Update $request): RedirectResponse
     {
-        Post::query()->where('id', $request->get('id'))
-            ->update([
-                'title' => $request->get('title'),
-                'text' => $request->get('text')
-            ]);
+        $this->postService->update($request->all());
 
         return redirect()->route('post.index');
     }
 
-    public function destroy(Post $post)
+    public function destroy(Post $post): RedirectResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
+        $this->postService->destroy($post);
 
-        if ($this->postService->isPostCreatedByUser($post, $user)) {
-            $post->delete();
-        }
         return redirect()->route('post.index');
     }
 }

@@ -8,12 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Update extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         if (empty($this->id)) {
             return false;
@@ -22,17 +17,12 @@ class Update extends FormRequest
         return Auth::user()?->id == $post->user_id;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'id' => 'required',
-            'title' => 'required|max:255|unique:posts,title,' . $this->id,
-            'text' => 'required'
+            'id' => ['required'],
+            'title' => ['required', 'max:255', 'unique:posts,title,' . $this->id],
+            'text' => ['required']
         ];
     }
 }

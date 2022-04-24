@@ -4,24 +4,18 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RatingService
 {
-    public function isPostRatedByUser(Post $post, User $user): bool
+    public function up(Post $post): void
     {
-        return $post->users()->where('user_id', $user->id)->exists();
-    }
+        /** @var User $user */
+        $user = Auth::user();
 
-    public function isPostCreatedByUser(Post $post, User $user): bool
-    {
-        return $post->user_id == $user->id;
-    }
-
-    public function up(Post $post, User $user): void
-    {
         if (
-            !$this->isPostRatedByUser($post, $user) &&
-            !$this->isPostCreatedByUser($post, $user)
+            !$post->isRatedByUser($user) &&
+            !$post->isCreatedByUser($user)
         ) {
             $post->users()->sync([
                 $user->id => [
@@ -33,11 +27,14 @@ class RatingService
         }
     }
 
-    public function down(Post $post, User $user): void
+    public function down(Post $post): void
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         if (
-            !$this->isPostRatedByUser($post, $user) &&
-            !$this->isPostCreatedByUser($post, $user)
+            !$post->isRatedByUser($user) &&
+            !$post->isCreatedByUser($user)
         ) {
             $post->users()->sync([
                 $user->id => [
