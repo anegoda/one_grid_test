@@ -13,8 +13,8 @@ class Update extends FormRequest
         if (empty($this->id)) {
             return false;
         }
-        $post = Post::query()->find($this->id);
-        return Auth::user()?->id == $post->user_id;
+
+        return auth()->user()->posts()->where('id', $this->id)->exists();
     }
 
     public function rules(): array

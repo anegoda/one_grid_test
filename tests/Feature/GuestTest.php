@@ -11,14 +11,14 @@ class GuestTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_the_application_returns_a_successful_response()
+    public function testTheApplicationReturnsASuccessfulResponse()
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
     }
 
-    public function test_the_guest_cant_create_post()
+    public function testTheGuestCantCreatePost()
     {
         $response = $this->get(route('post.create'));
 
@@ -26,7 +26,7 @@ class GuestTest extends TestCase
             ->assertRedirect('login');
     }
 
-    public function test_the_guest_cant_edit_post()
+    public function testTheGuestCantEditPost()
     {
         $post = Post::factory()->create();
 
@@ -36,7 +36,7 @@ class GuestTest extends TestCase
             ->assertRedirect('login');
     }
 
-    public function test_the_guest_cant_update_post()
+    public function testTheGuestCantUpdatePost()
     {
         $post = Post::factory()->create();
 
@@ -48,7 +48,7 @@ class GuestTest extends TestCase
             ->assertRedirect('login');
     }
 
-    public function test_the_guest_cant_delete_post()
+    public function testTheGuestCantDeletePost()
     {
         $post = Post::factory()->create();
 

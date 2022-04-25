@@ -15,7 +15,6 @@ class Post extends Model
     const RATE_DOWN_VALUE = 0,
           RATE_UP_VALUE   = 1;
 
-
     protected $fillable = [
         'user_id',
         'title',
@@ -49,7 +48,7 @@ class Post extends Model
 
     public function isCreatedByUser(User $user): bool
     {
-        return $this->user_id == $user->id;
+        return $this->user_id === $user->id;
     }
 
     public function isRatedByUser(User $user): bool

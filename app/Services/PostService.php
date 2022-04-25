@@ -4,10 +4,16 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PostService
 {
+    public function list(): Collection
+    {
+        return Post::with('ratingValues')->get();
+    }
+
     public function store(array $data): void
     {
         $post = new Post;
@@ -27,7 +33,7 @@ class PostService
             ]);
     }
 
-    public function destroy(Post $post)
+    public function destroy(Post $post): void
     {
         /** @var User $user */
         $user = Auth::user();

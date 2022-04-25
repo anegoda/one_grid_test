@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('post_ratings', function (Blueprint $table) {
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('post_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->tinyInteger('value'); // 0 - dislike, 1 - like
             $table->timestamps();
 

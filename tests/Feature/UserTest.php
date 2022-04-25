@@ -21,21 +21,21 @@ class UserTest extends TestCase
         $this->user = $user;
     }
 
-    public function test_the_application_returns_a_successful_response_for_logged_user()
+    public function testTheApplicationReturnsASuccessfulResponseForLoggedUser()
     {
         $response = $this->actingAs($this->user)->get('/');
 
         $response->assertStatus(200);
     }
 
-    public function test_user_can_create_post()
+    public function testUserCanCreatePost()
     {
         $response = $this->actingAs($this->user)->get(route('post.create'));
 
         $response->assertStatus(200);
     }
 
-    public function test_user_can_store_post()
+    public function testUserCanStorePost()
     {
         $data = [
             'title' => $this->faker->text(50),
@@ -50,7 +50,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $data);
     }
 
-    public function test_user_can_edit_own_post()
+    public function testUserCanEditOwnPost()
     {
         $post = Post::factory()->create([
             'user_id' => $this->user->id
@@ -61,7 +61,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_cant_edit_post_of_another_user()
+    public function testUserCantEditPostOfAnotherUser()
     {
         $post = Post::factory()->create();
 
@@ -71,7 +71,7 @@ class UserTest extends TestCase
             ->assertRedirect(route('post.index'));
     }
 
-    public function test_user_can_update_own_post()
+    public function testUserCanUpdateOwnPost()
     {
         $post = Post::factory()->create([
             'user_id' => $this->user->id
@@ -91,7 +91,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $data);
     }
 
-    public function test_user_cant_update_post_of_another_user()
+    public function testUserCantUpdatePostOfAnotherUser()
     {
         $post = Post::factory()->create();
 
@@ -108,7 +108,7 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('posts', $data);
     }
 
-    public function test_user_can_delete_own_post()
+    public function testUserCanDeleteOwnPost()
     {
         $post = Post::factory()->create([
             'user_id' => $this->user->id
@@ -122,7 +122,7 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('posts', $post->toArray());
     }
 
-    public function test_user_cant_delete_post_of_another_user()
+    public function testUserCantDeletePostOfAnotherUser()
     {
         $post = Post::factory()->create();
 
@@ -134,7 +134,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $post->toArray());
     }
 
-    public function test_user_cant_vote_up_own_post()
+    public function testUserCantVoteUpOwnPost()
     {
         $post = Post::factory()->create([
             'user_id' => $this->user->id
@@ -148,7 +148,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $post->toArray());
     }
 
-    public function test_user_can_vote_up_post_of_another_user()
+    public function testUserCanVoteUpPostOfAnotherUser()
     {
         $post = Post::factory()->create();
 
@@ -161,7 +161,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $post->toArray());
     }
 
-    public function test_user_cant_vote_dow_own_post()
+    public function testUserCantVoteDownOwnPost()
     {
         $post = Post::factory()->create([
             'user_id' => $this->user->id
@@ -175,7 +175,7 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('posts', $post->toArray());
     }
 
-    public function test_user_can_vote_down_post_of_another_user()
+    public function testUserCanVoteDownPostOfAnotherUser()
     {
         $post = Post::factory()->create();
 

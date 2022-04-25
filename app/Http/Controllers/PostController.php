@@ -18,7 +18,7 @@ class PostController extends Controller
     public function index(): View
     {
         return view('welcome', [
-            'posts' => Post::with('ratingValues')->get()
+            'posts' => $this->postService->list()
         ]);
     }
 

@@ -17,9 +17,10 @@ class PostOwner
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->id != $request->route('post')->user_id) {
+        if (Auth::user()->id !== $request->route('post')->user_id) {
             return redirect()->route('post.index');
         }
+
         return $next($request);
     }
 }
